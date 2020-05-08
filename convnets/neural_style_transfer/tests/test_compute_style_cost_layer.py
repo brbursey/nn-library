@@ -1,7 +1,9 @@
 from unittest import TestCase
-from nst_support_functions import compute_style_cost_layer
 import tensorflow as tf
 import numpy as np
+import sys
+sys.path.append('../')
+from nst_support_functions import compute_style_cost_layer
 
 class TestCompute_style_cost_layer(TestCase):
 

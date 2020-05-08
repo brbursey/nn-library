@@ -1,6 +1,8 @@
 from unittest import TestCase
-from nst_support_functions import gram_matrix
 import tensorflow as tf
+import sys
+sys.path.append('../')
+from nst_support_functions import gram_matrix
 
 class TestGram_matrix(TestCase):
 

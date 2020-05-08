@@ -1,5 +1,8 @@
 import tensorflow as tf
 import numpy as np
+import sys
+sys.path.append('../')
+from nst_support_functions import compute_style_cost
 
 class TestComputeStyleCost(tf.test.TestCase):
 
@@ -10,11 +13,8 @@ class TestComputeStyleCost(tf.test.TestCase):
             self.model.add(tf.keras.layers.Conv2D(1, (3, 3), activation='relu', input_shape=(4, 4, 1)))
             self.model.add(tf.keras.layers.Flatten())
             self.model.build()
-        # self.model.summary()
+            self.model._name = "MockModel"
 
-
-    def testMockConv2DModel_OneLayer(self):
-        with self.session(use_gpu=True):
             weights = np.array(
                 [
                     [[[0]], [[-1]], [[0]]],
@@ -25,12 +25,27 @@ class TestComputeStyleCost(tf.test.TestCase):
             self.model.set_weights(
                 [weights, bias]
             )
-            input = np.full((1, 4, 4, 1), 2.0)
+            self.input = np.full((1, 4, 4, 1), 2.0)
 
-            output = self.model(input)
+
+    def testMockConv2DModel_OneLayer(self):
+        with self.session(use_gpu=True):
+
+            output = self.model(self.input)
             expected = np.array([[2.0, 2.0, 2.0, 2.0]])
 
             self.assertAllEqual(expected, output)
 
+
+    def testComputeStyleCost(self):
+        with self.session(use_gpu=True):
+            gen_input = np.full((1, 4, 4, 1), 3.0)
+            layers = ['conv2d']
+            coefs = [1]
+
+            expected = 6.25
+            result = compute_style_cost(self.model, self.input, gen_input, layers, coefs, name="MockModel")
+
+            assert expected == result.numpy()
 
 tf.test.main()

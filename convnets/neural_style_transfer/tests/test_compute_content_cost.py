@@ -1,7 +1,9 @@
 from unittest import TestCase
-from nst_support_functions import compute_content_cost
 import tensorflow as tf
 import numpy as np
+import sys
+sys.path.append('../')
+from nst_support_functions import compute_content_cost
 
 
 class TestCompute_content_cost(TestCase):
